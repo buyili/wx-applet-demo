@@ -1,0 +1,11 @@
+<!--examples/request/request.wxml-->
+<view class="title">Request Module Examples</view>
+
+<form bind:submit="onSaveConfig">
+    <label>domain</label>
+    <input name="domain" value="{{domain}}" />
+    <label>url</label>
+    <input name="url" value="{{url}}" />
+    <button form-type="submit">Request It</button>
+</form>
+

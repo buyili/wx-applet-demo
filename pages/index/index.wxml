@@ -10,4 +10,6 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+  <button bind:tap="onTestMock">Test Mock</button>
+  <navigator url="/examples/request/request">Request Examples</navigator>
 </view>

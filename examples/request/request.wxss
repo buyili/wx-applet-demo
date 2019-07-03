@@ -1,0 +1,16 @@
+/* examples/request/request.wxss */
+.title{
+    text-align: center;
+    font-size: 64rpx;
+    color: #80ffff;
+    font-weight: 700;
+}
+
+input{
+    box-sizing: border-box;
+    padding: 0 14rpx;
+    height: 90rpx;
+    line-height: 90rpx;
+    border: 1px solid #eee;
+    box-shadow: 0 0 1px 1px #eeeeee;
+}

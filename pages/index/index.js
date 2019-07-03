@@ -2,6 +2,8 @@
 //获取应用实例
 const app = getApp()
 
+const service = require('../../utils/request.js')
+
 Page({
   data: {
     motto: 'Hello World',
@@ -13,6 +15,12 @@ Page({
   bindViewTap: function() {
     wx.navigateTo({
       url: '../logs/logs'
+    })
+  },
+  onTestMock(){
+    service.request({url:'http://www.baidu.com/hello'}).then((res)=>{
+      console.log(res);
+      
     })
   },
   onLoad: function () {
