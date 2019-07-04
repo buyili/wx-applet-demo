@@ -14,3 +14,12 @@ input{
     border: 1px solid #eee;
     box-shadow: 0 0 1px 1px #eeeeee;
 }
+
+.result{
+    background-color: #eee;
+    margin: 20rpx 15rpx;
+    padding: 10rpx;
+    box-shadow: 0 0 1px 1px #eee;
+    border:1px solid #eee;
+    min-height: 500px;
+}

@@ -9,7 +9,8 @@ Page({
    */
   data: {
     domain: 'http://www.test.com',
-    url:'/test'
+    url:'/test',
+    res:''
   },
 
   /**
@@ -18,8 +19,9 @@ Page({
    */
   onSaveConfig: function (e) {
     let {domain, url} = e.detail.value
-    service.request({
-      url: domain + url
+    service.get(domain + url).then((res)=>{
+      // this.setData({res})
+      this.setData({res:JSON.stringify(res)})
     })
   },
 

@@ -4,6 +4,9 @@ const DEFAULT_HEADER = {
     'content-type': 'application/json'
 }
 
+/**
+ * Create a new instance of InterceptorManager
+ */
 function InterceptorManager() {
     this.handlers = []
 }
@@ -50,27 +53,26 @@ InterceptorManager.prototype.forEach = function (fn) {
     })
 }
 
-// Dispatch a request to server using wx.request()
-// 
-// var reqTask = wx.request({
-//     url: '',
-//     data: {},
-//     header: { 'content-type': 'application/json' },
-//     method: 'GET',
-//     dataType: 'json',
-//     responseType: 'text',
-//     success: (result) => {
-//         /**
-//          * result: {
-//          * data	                string/Object/Arraybuffer	开发者服务器返回的数据
-//          * statusCode	        number	                    开发者服务器返回的 HTTP 状态码
-//          * header	            Object	                    开发者服务器返回的 HTTP Response Header
-//          * }
-//          */
-//     },
-//     fail: () => { },
-//     complete: () => { }
-// });
+/** Dispatch a request to server using wx.request()
+* 
+* var reqTask = wx.request({
+*     url: '',
+*     data: {},
+*     header: { 'content-type': 'application/json' },
+*     method: 'GET',
+*     dataType: 'json',
+*     responseType: 'text',
+*     success: (result) => {
+*           result: {
+*           data	            string/Object/Arraybuffer	开发者服务器返回的数据
+*           statusCode	        number	                    开发者服务器返回的 HTTP 状态码
+*           header	            Object	                    开发者服务器返回的 HTTP Response Header
+*           }
+*     },
+*     fail: () => { },
+*     complete: () => { }
+* });
+*/
 function dispatchRequest(config) {
     return new Promise((resolve, reject) => {
         wx.request({
@@ -123,7 +125,7 @@ Request.prototype.request = function (config) {
  * 
  * @param {Object} defaultConfig 默认配置 the default config for the instance
  */
-function createInstance(defaultConfig){
+function createInstance(defaultConfig) {
     return new Request(defaultConfig)
 }
 
@@ -131,8 +133,75 @@ function createInstance(defaultConfig){
 var request = createInstance();
 
 // Factory for creating new instances
-request.create = function(config){
+request.create = function (config) {
     return createInstance(config);
 }
+
+/**
+ * Determine if a value is an Array
+ * 
+ * @param {Object} val The value to test
+ * 
+ * @returns {boolean} True if value is Array, otherwise false
+ */
+function isArray(val) {
+    return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+    // Dont't bother if no value provided
+    if (obj === null || typeof obj === 'undefined') {
+        return;
+    }
+
+    if (typeof obj !== 'object') {
+        obj = [obj]
+    }
+
+    if (isArray(obj)) {
+        for (var i = 0, l = obj.length; i < l; i++) {
+            fn.call(null, obj[i], i, obj);
+        }
+    } else {
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                fn.call(null, obj[key], key, obj)
+            }
+        }
+    }
+}
+
+forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+    Request.prototype[method] = function (url, config) {
+        return this.request({
+            ...config || {},
+            method: method,
+            url: url
+        })
+    }
+})
+
+forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+    Request.prototype[method] = function (url, data, config) {
+        return this.request({
+            ...config || {},
+            method: method,
+            url: url,
+            data: data
+        })
+    }
+})
 
 module.exports = request

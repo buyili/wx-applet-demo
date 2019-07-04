@@ -9,3 +9,5 @@
     <button form-type="submit">Request It</button>
 </form>
 
+
+<view class="result">{{res}}</view>
